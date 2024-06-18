@@ -1,8 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken"); 
-const Appointment = require("../../models/Admin/adminAppointmentModel");
+const AppointmentList = require("../../models/User/AppointmentModel");
 const { validationResult } = require('express-validator');
-const AdminLoginRegister = require("../../models/Admin/AdminRegisterLogin/adminModel");
+
 
 const appointmentsList = asyncHandler(async (req, res) => {
     const errors = validationResult(req);
@@ -13,7 +13,7 @@ const appointmentsList = asyncHandler(async (req, res) => {
     const { input, token } = req.body;
 
     try {
-      const admin = await AdminLoginRegister.findOne({ input }).select(
+      const admin = await AppointmentsList.findOne({ input }).select(
         "-password"
       )
       if (!admin) {
@@ -26,13 +26,13 @@ const appointmentsList = asyncHandler(async (req, res) => {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const appointmentsLists=await Appointment.find({});
+      const appointmentsLists=await AppointmentList.find({});
       
 
       res.status(200).json({
         success: true,
-        adminAppointmentList:appointmentsLists,
-        message: "Appointments list Granted"
+        userAppointmentList:AppointmentList,
+        message: "Appointments list Details"
       });
     } catch (error) {
       console.error(error);
@@ -46,18 +46,18 @@ const createAppointment = asyncHandler(async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { input, token, appointmentData } = req.body;
+  const { input, token, appointmentListData } = req.body;
 
   if (
     !input ||
     !token ||
-    !appointmentData
+    !appointmentListData
   ) {
     return res.status(402).json({ message: "Please fill all fileds" });
   }
 
   try {
-    const admin = await AdminLoginRegister.findOne({ input }).select(
+    const admin = await AppointmentList.findOne({ input }).select(
       "-password"
     )
     if (!admin) {
@@ -69,7 +69,7 @@ const createAppointment = asyncHandler(async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const newAppointment = new Appointment(appointmentData);
+    const newAppointment = new AppointmentList(appointmentListData);
 
     await newAppointment.save();
 
