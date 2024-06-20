@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const Appointment = require("../Admin/adminAppointmentModel");
 
 const AppointmentSchema = new mongoose.Schema({
@@ -24,3 +25,4 @@ const AppointmentSchema = new mongoose.Schema({
 
 const AppointmentsList = mongoose.model('AppointmentList',AppointmentSchema);
 module.exports = AppointmentsList;
+
